@@ -603,7 +603,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
             groupConfig = {
                 name: `${country}${NODE_SUFFIX}`,
                 icon: meta.icon,
-                type: select,
+                type: "select",
                 proxies: nodeNames,
             };
         } else {
@@ -620,13 +620,13 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
                 "exclude-filter": landing
                     ? `${landingExcludeFilter}|${baseExcludeFilter}`
                     : baseExcludeFilter,
-                type: select,
+                type: "select",
             };
         }
 
         if (!loadBalance) {
             Object.assign(groupConfig, {
-                url: "https://cp.cloudflare.com/generate_204",
+                url: "http://www.gstatic.com/generate_204",
                 interval: 60,
                 tolerance: 20,
                 lazy: false,
