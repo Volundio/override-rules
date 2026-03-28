@@ -343,11 +343,20 @@ const ruleProviders = {
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/IP.list",
         path: "./ruleset/IP.list",
     },
+    MangaSite: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/MangaSite.list",
+        path: "./ruleset/MangaSite.list",
+    },
 };
 
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,MangaSite,MangaSite`,
     `RULE-SET,Download,下载专用`,
     `RULE-SET,IP,自建节点`,
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
@@ -769,12 +778,6 @@ function buildProxyGroups({
                 : { proxies: customNodes && customNodes.length > 0 ? customNodes : ["DIRECT"] }),
         },
         {
-            name: "静态资源",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cloudflare.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
             name: "Bilimanga",
             icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/bilimanga.png",
             type: "select",
@@ -823,8 +826,20 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
+            name: "MangaSite",
+            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/manga.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
             name: "YouTube",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "Telegram",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png",
             type: "select",
             proxies: defaultProxies,
         },
@@ -843,12 +858,6 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "Crypto",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency_3.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
             name: "Google",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Google.png",
             type: "select",
@@ -857,6 +866,36 @@ function buildProxyGroups({
         {
             name: "Microsoft",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Microsoft_Copilot.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "OneDrive",
+            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Onedrive.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "PikPak",
+            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/PikPak.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "SSH(22端口)",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Server.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "静态资源",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cloudflare.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "Crypto",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency_3.png",
             type: "select",
             proxies: defaultProxies,
         },
@@ -879,36 +918,12 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "Telegram",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
             name: "Truth Social",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/TruthSocial.png",
             type: "select",
             proxies: hasUS
                 ? ["美国节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL]
                 : defaultProxies,
-        },
-        {
-            name: "OneDrive",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Onedrive.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
-            name: "PikPak",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/PikPak.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
-            name: "SSH(22端口)",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Server.png",
-            type: "select",
-            proxies: defaultProxies,
         },
         {
             name: "搜狗输入法",
