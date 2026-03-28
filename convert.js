@@ -344,7 +344,6 @@ const baseRules = [
     `RULE-SET,CDNResources,静态资源`,
     `RULE-SET,AdditionalCDNResources,静态资源`,
     `RULE-SET,Crypto,Crypto`,
-    `RULE-SET,EHentai,E-Hentai`,
     `RULE-SET,TikTok,TikTok`,
     `RULE-SET,GoogleFCM,${PROXY_GROUPS.DIRECT}`,
     `DOMAIN,services.googleapis.cn,${PROXY_GROUPS.SELECT}`,
@@ -463,26 +462,22 @@ const geoxURL = {
 const countriesMeta = {
     香港: {
         weight: 10,
-        pattern: "香港|港|HK|hk|Hong Kong|HongKong|hongkong|🇭🇰",
+        pattern: "香港|港|HK|hk|Hong Kong|HongKong|hongkong|🇭🇰|广港",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png",
-    },
-    澳门: {
-        pattern: "澳门|MO|Macau|🇲🇴",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Macao.png",
     },
     台湾: {
         weight: 20,
-        pattern: "台|新北|彰化|TW|Taiwan|🇹🇼",
+        pattern: "台|新北|彰化|TW|Taiwan|🇹🇼|广台",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png",
     },
     新加坡: {
         weight: 30,
-        pattern: "新加坡|坡|狮城|SG|Singapore|🇸🇬",
+        pattern: "新加坡|坡|狮城|SG|Singapore|🇸🇬|广新",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png",
     },
     日本: {
         weight: 40,
-        pattern: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan|🇯🇵",
+        pattern: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan|🇯🇵|广日",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
     },
     韩国: {
@@ -491,7 +486,7 @@ const countriesMeta = {
     },
     美国: {
         weight: 50,
-        pattern: "美国|美|US|United States|🇺🇸",
+        pattern: "美国|美|US|United States|🇺🇸|堪萨斯",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
     },
     德国: {
@@ -501,7 +496,7 @@ const countriesMeta = {
     },
     Others: {
         weight: 50,
-        pattern: "加拿大|Canada|CA|🇨🇦|英国|United Kingdom|UK|伦敦|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|",
+        pattern: "加拿大|Canada|CA|🇨🇦|英国|United Kingdom|UK|伦敦|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|澳门|MO|Macau|🇲🇴",
         icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
     },
 };
@@ -758,7 +753,7 @@ function buildProxyGroups({
         },
         {
             name: "EHentai",
-            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/e-hentai.png",
+            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/Ehentai.png",
             type: "select",
             proxies: defaultProxies,
         },
@@ -778,7 +773,7 @@ function buildProxyGroups({
             name: "JanpanWeb",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
             type: "select",
-            proxies: hasJP ? ["日本节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL, PROXY_GROUPS.DIRECT] : defaultProxies,
+            proxies: defaultProxies,
         },
         {
             name: "AI",
@@ -833,12 +828,6 @@ function buildProxyGroups({
         {
             name: "Spotify",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Spotify.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
-            name: "E-Hentai",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Ehentai.png",
             type: "select",
             proxies: defaultProxies,
         },
