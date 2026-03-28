@@ -351,18 +351,54 @@ const ruleProviders = {
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/MangaSite.list",
         path: "./ruleset/MangaSite.list",
     },
+    HK: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/HK.list",
+        path: "./ruleset/HK.list",
+    },
+    Proxy: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/Proxy.list",
+        path: "./ruleset/Proxy.list",
+    },
+    USA: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/USA.list",
+        path: "./ruleset/USA.list",
+    },
+    REJECT: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/REJECT.list",
+        path: "./ruleset/REJECT.list",
+    },
 };
 
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,REJECT,${PROXY_GROUPS.REJECT}`,
+    `RULE-SET,HK,香港节点`,
+    `RULE-SET,USA,美国节点`,
+    `RULE-SET,Proxy,${PROXY_GROUPS.SELECT}`,
     `RULE-SET,MangaSite,MangaSite`,
     `RULE-SET,Download,下载专用`,
     `RULE-SET,IP,自建节点`,
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,ChinaSNS,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,Twitter,Twitter`,
-    `RULE-SET,JanpanWeb,JanpanWeb`,
+    `RULE-SET,JanpanWeb,日本节点`,
     `RULE-SET,Bilimanga,Bilimanga`,
     `RULE-SET,PIXIV,PIXIV`,
     `RULE-SET,EHentai,EHentai`,
@@ -813,12 +849,7 @@ function buildProxyGroups({
             type: "select",
             proxies: defaultProxies,
         },
-        {
-            name: "JanpanWeb",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
+
         {
             name: "AI",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/chatgpt.png",
