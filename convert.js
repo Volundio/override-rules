@@ -188,7 +188,7 @@ const ruleProviders = {
         behavior: "domain",
         format: "text",
         interval: 86400,
-        url: "https://raw.githubusercontent.com/Volundio/override-rules/master/ruleset/download.list",
+        url: "https://raw.githubusercontent.com/Volundio/override-rules/master/ruleset/Download.list",
         path: "./ruleset/download.list",
     },
     ADBlock: {
@@ -383,11 +383,20 @@ const ruleProviders = {
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/REJECT.list",
         path: "./ruleset/REJECT.list",
     },
+    DIRECT: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/DIRECT.list",
+        path: "./ruleset/DIRECT.list",
+    },
 };
 
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,DIRECT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,REJECT,REJECT`,
     `RULE-SET,HK,香港节点`,
     `RULE-SET,USA,美国节点`,
@@ -858,7 +867,7 @@ function buildProxyGroups({
         },
         {
             name: "MangaSite",
-            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/manga.png",
+            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/comic.png",
             type: "select",
             proxies: defaultProxies,
         },
