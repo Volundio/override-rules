@@ -329,8 +329,9 @@ const ruleProviders = {
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
+    `RULE-SET,ChinaSNS,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,Twitter,Twitter`,
-    `RULE-SET,JanpanWeb,日本节点`,
+    `RULE-SET,JanpanWeb,JanpanWeb`,
     `RULE-SET,Bilimanga,Bilimanga`,
     `RULE-SET,PIXIV,PIXIV`,
     `RULE-SET,EHentai,EHentai`,
@@ -661,6 +662,7 @@ function buildProxyGroups({
     const hasTW = countries.includes("台湾");
     const hasHK = countries.includes("香港");
     const hasUS = countries.includes("美国");
+    const hasJP = countries.includes("日本");
 
     /**
      * "前置代理"组的候选列表：从 `defaultSelector` 中移除"落地节点"和"故障转移"，
@@ -765,6 +767,18 @@ function buildProxyGroups({
             icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/steam.png",
             type: "select",
             proxies: defaultProxies,
+        },
+        {
+            name: "Twitter",
+            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/x.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "JanpanWeb",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
+            type: "select",
+            proxies: hasJP ? ["日本节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL, PROXY_GROUPS.DIRECT] : defaultProxies,
         },
         {
             name: "AI",
