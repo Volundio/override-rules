@@ -380,9 +380,17 @@ const baseRules = [
     `MATCH,${PROXY_GROUPS.SELECT}`,
 ];
 
-// 构建最终应用的规则列表，会根据 quicEnabled 参数决定是否开启 QUIC（UDP 443）阻断
-function buildRules({ quicEnabled }) {
-    const ruleList = [...baseRules]; // ruleList: 基于 baseRules 浅拷贝出来的分流列表，避免对全局数组变量造成污染
+// 构建最终应用的规则列表，会根据 quicEnabled 参数决定是否开启 QUIC（UDP 443）阻断，
+// 同时检查是否生成了特定的策略组（如“自建节点”），如果没有生成则回退到直连，避免内核报错
+function buildRules({ quicEnabled, proxyGroupNames = [] }) {
+    const ruleList = baseRules.map(rule => {
+        // 如果规则指向“自建节点”，但当前没有生成该策略组，则回退到直连
+        if (rule === `RULE-SET,IP,自建节点` && !proxyGroupNames.includes("自建节点")) {
+            return `RULE-SET,IP,DIRECT`;
+        }
+        return rule;
+    });
+
     if (!quicEnabled) {
         /**
          * 屏蔽 UDP 443（QUIC）流量。
@@ -971,7 +979,8 @@ function main(config) {
         proxies: globalProxies,
     });
 
-    const finalRules = buildRules({ quicEnabled }); // finalRules: 生成和组装完毕的规则路由列表
+    const proxyGroupNames = proxyGroups.map(g => g.name);
+    const finalRules = buildRules({ quicEnabled, proxyGroupNames }); // finalRules: 生成和组装完毕的规则路由列表
 
     // 如果启用 fullConfig (完整配置输出，常用于非接管等纯内核独立运行场景)，
     // 追加诸如端口监听、日志级别、控制器地址等基础环境设置。您可以根据需要在这里修改默认端口。
