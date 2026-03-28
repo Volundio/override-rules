@@ -323,11 +323,20 @@ const ruleProviders = {
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/JanpanWeb.list",
         path: "./ruleset/JanpanWeb.list",
     },
+    IP: {
+        type: "http",
+        behavior: "classical",
+        format: "text",
+        interval: 86400,
+        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/IP.list",
+        path: "./ruleset/IP.list",
+    },
 };
 
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,IP,自建节点`,
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,ChinaSNS,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,Twitter,Twitter`,
@@ -497,6 +506,11 @@ const countriesMeta = {
     Others: {
         weight: 50,
         pattern: "加拿大|Canada|CA|🇨🇦|英国|United Kingdom|UK|伦敦|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|澳门|MO|Macau|🇲🇴",
+        icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
+    },
+    自建: {
+        weight: 60,
+        pattern: "自建|自建节点",
         icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
     },
 };
@@ -988,7 +1002,7 @@ function main(config) {
         "rule-providers": ruleProviders,
         rules: finalRules,
         sniffer: snifferConfig,
-        dns: fakeIPEnabled ? dnsConfigFakeIp : dnsConfig,
+        // dns: fakeIPEnabled ? dnsConfigFakeIp : dnsConfig,
         "geodata-mode": true,
         "geox-url": geoxURL,
     });
