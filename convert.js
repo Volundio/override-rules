@@ -183,6 +183,14 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes 
 // 格式说明：包含了行为类型（behavior）、更新间隔（interval）、远程规则直链（url）以及缓存路径（path）
 // 您可以在此处添加或修改自定义的 URL 规则集
 const ruleProviders = {
+    Download: {
+        type: "http",
+        behavior: "domain",
+        format: "text",
+        interval: 86400,
+        url: "https://raw.githubusercontent.com/Volundio/override-rules/master/ruleset/download.list",
+        path: "./ruleset/download.list",
+    },
     ADBlock: {
         type: "http",
         behavior: "domain",
@@ -340,6 +348,7 @@ const ruleProviders = {
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,Download,下载专用`,
     `RULE-SET,IP,自建节点`,
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,ChinaSNS,${PROXY_GROUPS.DIRECT}`,
@@ -826,6 +835,12 @@ function buildProxyGroups({
             proxies: hasTW
                 ? ["台湾节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL, PROXY_GROUPS.DIRECT]
                 : defaultProxies,
+        },
+        {
+            name: "下载专用",
+            icon: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/icons/download.png",
+            type: "select",
+            proxies: defaultProxies,
         },
         {
             name: "Crypto",
