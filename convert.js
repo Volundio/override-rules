@@ -123,7 +123,7 @@ const PROXY_GROUPS = {
  */
 const buildList = (...elements) => elements.flat().filter(Boolean);
 
-function buildBaseLists({ landing, lowCostNodes, countryGroupNames }) {
+function buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes }) {
     const lowCost = lowCostNodes.length > 0 || regexFilter;
 
     /**
@@ -131,6 +131,7 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames }) {
      */
     const defaultSelector = buildList(
         PROXY_GROUPS.FALLBACK,
+        "自建节点",
         landing && PROXY_GROUPS.LANDING,
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
@@ -143,6 +144,7 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames }) {
      */
     const defaultProxies = buildList(
         PROXY_GROUPS.SELECT,
+        "自建节点",
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
         PROXY_GROUPS.MANUAL,
@@ -154,6 +156,7 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames }) {
      */
     const defaultProxiesDirect = buildList(
         PROXY_GROUPS.DIRECT,
+        "自建节点",
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
         PROXY_GROUPS.SELECT,
@@ -165,6 +168,7 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames }) {
      * 不包含"选择代理"自身，避免循环引用。
      */
     const defaultFallback = buildList(
+        "自建节点",
         landing && PROXY_GROUPS.LANDING,
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
@@ -380,17 +384,9 @@ const baseRules = [
     `MATCH,${PROXY_GROUPS.SELECT}`,
 ];
 
-// 构建最终应用的规则列表，会根据 quicEnabled 参数决定是否开启 QUIC（UDP 443）阻断，
-// 同时检查是否生成了特定的策略组（如“自建节点”），如果没有生成则回退到直连，避免内核报错
-function buildRules({ quicEnabled, proxyGroupNames = [] }) {
-    const ruleList = baseRules.map(rule => {
-        // 如果规则指向“自建节点”，但当前没有生成该策略组，则回退到直连
-        if (rule === `RULE-SET,IP,自建节点` && !proxyGroupNames.includes("自建节点")) {
-            return `RULE-SET,IP,DIRECT`;
-        }
-        return rule;
-    });
-
+// 构建最终应用的规则列表，会根据 quicEnabled 参数决定是否开启 QUIC（UDP 443）阻断
+function buildRules({ quicEnabled }) {
+    const ruleList = [...baseRules]; // ruleList: 基于 baseRules 浅拷贝出来的分流列表，避免对全局数组变量造成污染
     if (!quicEnabled) {
         /**
          * 屏蔽 UDP 443（QUIC）流量。
@@ -516,11 +512,6 @@ const countriesMeta = {
         pattern: "加拿大|Canada|CA|🇨🇦|英国|United Kingdom|UK|伦敦|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|澳门|MO|Macau|🇲🇴",
         icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
     },
-    自建: {
-        weight: 60,
-        pattern: "自建|自建节点",
-        icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
-    },
 };
 
 // 节点名称匹配正则：用于识别订阅中的"低倍率"和"落地（家宽）"节点。
@@ -535,6 +526,9 @@ const LANDING_REGEX = /家宽|家庭|家庭宽带|商宽|商业宽带|星链|Sta
  */
 const LANDING_PATTERN = "(?i)家宽|家庭|家庭宽带|商宽|商业宽带|星链|Starlink|落地";
 
+const CUSTOM_REGEX = /自建|自建节点/i;
+const CUSTOM_PATTERN = "(?i)自建|自建节点";
+
 // 提取满足"低倍率"命名特征的所有节点名称列表
 function parseLowCost(config) {
     return (config.proxies || [])
@@ -546,6 +540,13 @@ function parseLowCost(config) {
 function parseLandingNodes(config) {
     return (config.proxies || [])
         .filter((proxy) => LANDING_REGEX.test(proxy.name))
+        .map((proxy) => proxy.name);
+}
+
+// 提取满足"自建"命名特征的所有节点名称列表
+function parseCustomNodes(config) {
+    return (config.proxies || [])
+        .filter((proxy) => CUSTOM_REGEX.test(proxy.name))
         .map((proxy) => proxy.name);
 }
 
@@ -667,6 +668,7 @@ function buildProxyGroups({
     countryProxyGroups,
     lowCostNodes,
     landingNodes,
+    customNodes,
     defaultProxies,
     defaultProxiesDirect,
     defaultSelector,
@@ -748,6 +750,14 @@ function buildProxyGroups({
             interval: 180,
             tolerance: 20,
             lazy: false,
+        },
+        {
+            name: "自建节点",
+            icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
+            type: "select",
+            ...(regexFilter
+                ? { "include-all": true, filter: CUSTOM_PATTERN, proxies: ["DIRECT"] }
+                : { proxies: customNodes && customNodes.length > 0 ? customNodes : ["DIRECT"] }),
         },
         {
             name: "静态资源",
@@ -931,6 +941,7 @@ function main(config) {
     const countryInfo = parseCountries(resultConfig);
     const lowCostNodes = parseLowCost(resultConfig);
     const landingNodes = landing ? parseLandingNodes(resultConfig) : [];
+    const customNodes = parseCustomNodes(resultConfig);
     const countryGroupNames = getCountryGroupNames(countryInfo, countryThreshold);
     const countries = stripNodeSuffix(countryGroupNames);
 
@@ -938,7 +949,7 @@ function main(config) {
      * 构建各类通用候选列表，供后续策略组复用。
      */
     const { defaultProxies, defaultProxiesDirect, defaultSelector, defaultFallback } =
-        buildBaseLists({ landing, lowCostNodes, countryGroupNames });
+        buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes });
 
     /**
      * 为每个地区生成对应的 `url-test` 或 `load-balance` 自动测速组。
@@ -960,6 +971,7 @@ function main(config) {
         countryProxyGroups,
         lowCostNodes,
         landingNodes,
+        customNodes,
         defaultProxies,
         defaultProxiesDirect,
         defaultSelector,
@@ -979,8 +991,7 @@ function main(config) {
         proxies: globalProxies,
     });
 
-    const proxyGroupNames = proxyGroups.map(g => g.name);
-    const finalRules = buildRules({ quicEnabled, proxyGroupNames }); // finalRules: 生成和组装完毕的规则路由列表
+    const finalRules = buildRules({ quicEnabled }); // finalRules: 生成和组装完毕的规则路由列表
 
     // 如果启用 fullConfig (完整配置输出，常用于非接管等纯内核独立运行场景)，
     // 追加诸如端口监听、日志级别、控制器地址等基础环境设置。您可以根据需要在这里修改默认端口。
