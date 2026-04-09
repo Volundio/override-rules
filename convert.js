@@ -543,7 +543,7 @@ const countriesMeta = {
     },
     台湾: {
         weight: 20,
-        pattern: "台|新北|彰化|TW|Taiwan|🇹🇼|广台",
+        pattern: "台|新北|彰化|TW|Taiwan|🇹🇼|广台|台湾",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png",
     },
     香港: {
