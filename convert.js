@@ -130,13 +130,13 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes 
      * "选择代理"组的顶层候选列表：故障转移 → 落地节点（可选）→ 各国家组 → 低倍率（可选）→ 手动 → 直连。
      */
     const defaultSelector = buildList(
+        "DIRECT",
         PROXY_GROUPS.FALLBACK,
         "自建节点",
         landing && PROXY_GROUPS.LANDING,
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
-        PROXY_GROUPS.MANUAL,
-        "DIRECT"
+        PROXY_GROUPS.MANUAL
     );
 
     /**
@@ -144,11 +144,11 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes 
      */
     const defaultProxies = buildList(
         PROXY_GROUPS.SELECT,
+        PROXY_GROUPS.DIRECT,
         "自建节点",
         countryGroupNames,
         lowCost && PROXY_GROUPS.LOW_COST,
         PROXY_GROUPS.MANUAL,
-        PROXY_GROUPS.DIRECT
     );
 
     /**
@@ -396,6 +396,7 @@ const ruleProviders = {
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    "GEOSITE,CATEGORY-AI-!CN,AI",
     `RULE-SET,DIRECT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,REJECT,REJECT`,
     `RULE-SET,HK,香港节点`,
@@ -423,7 +424,6 @@ const baseRules = [
     `RULE-SET,TikTok,TikTok`,
     `RULE-SET,GoogleFCM,${PROXY_GROUPS.DIRECT}`,
     `DOMAIN,services.googleapis.cn,${PROXY_GROUPS.SELECT}`,
-    "GEOSITE,CATEGORY-AI-!CN,AI",
     `GEOSITE,GOOGLE-PLAY@CN,${PROXY_GROUPS.DIRECT}`,
     `GEOSITE,MICROSOFT@CN,${PROXY_GROUPS.DIRECT}`,
     "GEOSITE,ONEDRIVE,OneDrive",
