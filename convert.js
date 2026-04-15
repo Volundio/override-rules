@@ -397,7 +397,7 @@ const ruleProviders = {
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
-    "GEOIP,cloudflare,Cloudflare",
+    `RULE-SET,JanpanWeb,日本节点`,
     "GEOSITE,CATEGORY-AI-!CN,AI",
     `RULE-SET,DIRECT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,REJECT,REJECT`,
@@ -409,7 +409,6 @@ const baseRules = [
     `RULE-SET,IP,自建节点`,
     `RULE-SET,ChinaSNS,ChinaSNS`,
     `RULE-SET,Twitter,Twitter`,
-    `RULE-SET,JanpanWeb,日本节点`,
     `RULE-SET,Bilimanga,Bilimanga`,
     `RULE-SET,PIXIV,PIXIV`,
     `RULE-SET,EHentai,EHentai`,
@@ -445,6 +444,7 @@ const baseRules = [
     `GEOIP,CN,${PROXY_GROUPS.DIRECT}`,
     `GEOIP,PRIVATE,${PROXY_GROUPS.DIRECT}`,
     "DST-PORT,22,SSH(22端口)",
+    "GEOIP,cloudflare,Cloudflare",
     `MATCH,${PROXY_GROUPS.SELECT}`,
 ];
 
