@@ -189,7 +189,7 @@ const ruleProviders = {
         format: "text",
         interval: 86400,
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/Download.list",
-        path: "./ruleset/download.list",
+        path: "./ruleset/Download.list",
     },
     ADBlock: {
         type: "http",
