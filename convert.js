@@ -364,7 +364,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/Proxy.list",
+        url: "https://raw.githubusercontent.com/Volundio/override-rules/refs/heads/main/ruleset/Proxy.list",
         path: "./ruleset/Proxy.list",
     },
     USA: {
