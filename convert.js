@@ -388,7 +388,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/DIRECT.list",
+        url: "https://raw.githubusercontent.com/Volundio/override-rules/refs/heads/main/ruleset/DIRECT.list",
         path: "./ruleset/DIRECT.list",
     },
 };
