@@ -295,14 +295,6 @@ const ruleProviders = {
         url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/Crypto.list",
         path: "./ruleset/Crypto.list",
     },
-    PIXIV: {
-        type: "http",
-        behavior: "classical",
-        format: "text",
-        interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/PIXIV.list",
-        path: "./ruleset/PIXIV.list",
-    },
     ChinaSNS: {
         type: "http",
         behavior: "classical",
@@ -714,7 +706,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         if (!loadBalance) {
             Object.assign(groupConfig, {
                 url: "http://www.gstatic.com/generate_204",
-                interval: 2400,
+                interval: 3666,
                 tolerance: 20,
                 lazy: true,
             });
@@ -811,9 +803,9 @@ function buildProxyGroups({
             type: "fallback",
             url: "https://cp.cloudflare.com/generate_204",
             proxies: defaultFallback,
-            interval: 180,
+            interval: 3666,
             tolerance: 20,
-            lazy: false,
+            lazy: true,
         },
         {
             name: "自建节点",
@@ -1002,6 +994,9 @@ function buildProxyGroups({
                 icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Lab.png",
                 type: "url-test",
                 url: "https://cp.cloudflare.com/generate_204",
+                interval: 3666,
+                tolerance: 20,
+                lazy: true,
                 ...(!regexFilter
                     ? { proxies: lowCostNodes }
                     : { "include-all": true, filter: "(?i)0\\.[0-5]|低倍率|省流|大流量|实验性" }),
