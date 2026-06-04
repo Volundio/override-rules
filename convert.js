@@ -714,9 +714,9 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         if (!loadBalance) {
             Object.assign(groupConfig, {
                 url: "http://www.gstatic.com/generate_204",
-                interval: 60,
+                interval: 2400,
                 tolerance: 20,
-                lazy: false,
+                lazy: true,
             });
         }
 
