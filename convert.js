@@ -531,7 +531,7 @@ const geoxURL = {
 const countriesMeta = {
     Others: {
         weight: 50,
-        pattern: "加拿大|Canada|🇨🇦|英国|United Kingdom|UK|伦敦|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|澳门|Macau|🇲🇴",
+        pattern: "加拿大|Canada|🇨🇦|英国|United Kingdom|UK|伦敦|GB|London|🇬🇧|澳洲|澳大利亚|AU|Australia|🇦🇺|法国|法|FR|France|🇫🇷|俄罗斯|俄|RU|Russia|🇷🇺|泰国|泰|TH|Thailand|🇹🇭|印度|IN|India|🇮🇳|马来西亚|马来|MY|Malaysia|🇲🇾|土耳其|土|TR|Turkey|🇹🇷|荷兰|NL|Netherlands|🇳🇱|阿根廷|AR|Argentina|🇦🇷|巴西|BR|Brazil|🇧🇷|乌克兰|UA|Ukraine|🇺🇦|奥地利|AT|Austria|🇦🇹|哈萨克斯坦|KZ|Kazakhstan|🇰🇿|巴基斯坦|PK|Pakistan|🇵🇰|新西兰|NZ|New Zealand|🇳🇿|斐济|FI|Fiji|🇫🇯|澳门|Macau|🇲🇴",
         icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
     },
     台湾: {
