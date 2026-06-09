@@ -388,10 +388,10 @@ const ruleProviders = {
 // 基础路由分流规则列表：规则按从上到下的顺序进行匹配
 // 如果您需要增加自定义域名、网址关键字或 IP 的强制分流规则，请在数组开头或适当位置插入
 const baseRules = [
+    `RULE-SET,DIRECT,${PROXY_GROUPS.DIRECT}`,    
     `RULE-SET,PT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,JanpanWeb,日本节点`,
     "GEOSITE,CATEGORY-AI-!CN,AI",
-    `RULE-SET,DIRECT,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,REJECT,REJECT`,
     `RULE-SET,HK,香港节点`,
     `RULE-SET,USA,美国节点`,
