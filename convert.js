@@ -610,15 +610,20 @@ function parseCustomNodes(config) {
  * 遍历订阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
  *
  * 归类规则：
- * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
+ * - 开启落地节点功能时，名称匹配 `LANDING_REGEX` 的落地节点不参与普通地区统计。
+ * - 名称匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
  * - 每个节点只归入第一个匹配到的地区，避免重复计入。
+ * - 未匹配到任何地区的节点归入 `Others` 兜底组。
  * - 地区正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
  *   会在编译前自动剥离（JS RegExp 不支持该语法）。
  *
  * @param {object} config - 订阅配置对象，包含 `proxies` 数组。
+ * @param {object} [options] - 解析选项。
+ * @param {boolean} [options.excludeLanding=false] - 是否从普通地区组排除落地节点。
  * @returns {{ country: string, nodes: string[] }[]} - 每个元素对应一个地区及其节点名称列表。
  */
-function parseCountries(config) {
+function parseCountries(config, options = {}) {
+    const { excludeLanding = false } = options;
     const proxies = config.proxies || []; // proxies: 配置对象中所有未解析归类的原始代理节点集
 
     const countryNodes = Object.create(null); // countryNodes: 用于储存按国家分类后归类节点的中间字典对象
@@ -632,15 +637,22 @@ function parseCountries(config) {
     for (const proxy of proxies) {
         const name = proxy.name || "";
 
-        if (LANDING_REGEX.test(name)) continue;
+        if (excludeLanding && LANDING_REGEX.test(name)) continue;
         if (LOW_COST_REGEX.test(name)) continue;
 
+        let matched = false;
         for (const [country, regex] of Object.entries(compiledRegex)) {
             if (regex.test(name)) {
                 if (!countryNodes[country]) countryNodes[country] = [];
                 countryNodes[country].push(name);
+                matched = true;
                 break;
             }
+        }
+
+        if (!matched) {
+            if (!countryNodes.Others) countryNodes.Others = [];
+            countryNodes.Others.push(name);
         }
     }
 
@@ -691,14 +703,21 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
              * 同时用 `exclude-filter` 排除低倍率节点；若启用了落地功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
+            const excludeFilterParts = buildList(
+                landing && landingExcludeFilter,
+                baseExcludeFilter,
+                country === "Others" &&
+                    Object.entries(countriesMeta)
+                        .filter(([name]) => name !== "Others")
+                        .map(([, countryMeta]) => countryMeta.pattern)
+                        .join("|")
+            );
             groupConfig = {
                 name: `${country}${NODE_SUFFIX}`,
                 icon: meta.icon,
                 "include-all": true,
-                filter: meta.pattern,
-                "exclude-filter": landing
-                    ? `${landingExcludeFilter}|${baseExcludeFilter}`
-                    : baseExcludeFilter,
+                ...(country === "Others" ? {} : { filter: meta.pattern }),
+                "exclude-filter": excludeFilterParts.join("|"),
                 type: "select",
             };
         }
@@ -1016,7 +1035,7 @@ function main(config) {
      * 解析订阅中的节点，分别得到：地区归类信息、低倍率节点名列表、落地节点名列表，
      * 以及经过阈值过滤和权重排序后的国家组名列表与地区名列表。
      */
-    const countryInfo = parseCountries(resultConfig);
+    const countryInfo = parseCountries(resultConfig, { excludeLanding: landing });
     const lowCostNodes = parseLowCost(resultConfig);
     const landingNodes = landing ? parseLandingNodes(resultConfig) : [];
     const customNodes = parseCustomNodes(resultConfig);
