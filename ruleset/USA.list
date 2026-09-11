@@ -2,3 +2,4 @@ DOMAIN-SUFFIX,patreon.com
 DOMAIN-SUFFIX,workos.com
 DOMAIN-SUFFIX,mail.com
 DOMAIN-SUFFIX,openlist.250606.xyz
+IP-CIDR,23.94.153.0/24
