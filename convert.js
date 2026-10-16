@@ -185,7 +185,7 @@ function buildBaseLists({ landing, lowCostNodes, countryGroupNames, customNodes 
 const ruleProviders = {
     Download: {
         type: "http",
-        behavior: "domain",
+        behavior: "classical",
         format: "text",
         interval: 86400,
         url: "https://gcore.jsdelivr.net/gh/Volundio/override-rules@master/ruleset/Download.list",
